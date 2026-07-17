@@ -467,6 +467,24 @@
     100%{box-shadow:0 0 0 0 rgba(63,143,95,0);}
   }
 
+  .directions-float{
+  position:fixed;right:22px;bottom:90px;z-index:70;
+  width:56px;height:56px;border-radius:50%;background:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 12px 26px -8px rgba(242,169,59,.7);
+  text-decoration:none;
+}
+.directions-float svg{width:26px;height:26px;stroke:var(--navy);fill:none;}
+.float-tooltip{
+  position:absolute;right:66px;top:50%;transform:translateY(-50%);
+  background:var(--navy);color:#fff;font-size:.78rem;font-weight:500;
+  padding:6px 12px;border-radius:6px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .18s ease;
+}
+.directions-float:hover .float-tooltip,
+.wa-float:hover .float-tooltip{opacity:1;}
+@media(max-width:600px){ .float-tooltip{display:none;} }
+
   /* reveal animation */
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
   .reveal.in{opacity:1;transform:none;}
@@ -938,6 +956,11 @@
     <span>© 2026 Crest Solar Cell. All rights reserved. · <a href="#">Privacy Policy</a></span>
   </div>
 </footer>
+
+<a href="https://maps.app.goo.gl/aspMGZjMhWan3Z838?g_st=aw" target="_blank" rel="noopener" class="directions-float" aria-label="Get Directions">
+  <span class="float-tooltip">Get Directions</span>
+  <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+</a>
 
 <a href="https://wa.me/918126442500?text=Hi%20Crest%20Solar%2C%20I%27d%20like%20a%20solar%20quote" class="wa-float" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 20l1-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
