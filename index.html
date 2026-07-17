@@ -119,11 +119,10 @@
 
   /* ---------- Header ---------- */
   header{
-    position:sticky;top:0;z-index:60;
-    background:rgba(251,246,236,.88);
-    backdrop-filter:saturate(160%) blur(10px);
-    border-bottom:1px solid var(--line);
-  }
+  position:sticky;top:0;z-index:60;
+  background:rgba(251,246,236,.97);
+  border-bottom:1px solid var(--line);
+}
   .nav-row{
     display:flex;align-items:center;justify-content:space-between;
     padding:16px 28px;max-width:1180px;margin:0 auto;
@@ -502,24 +501,11 @@
 <header>
   <div class="nav-row">
     <a href="#top" class="logo">
-      <!-- <svg class="sun-mark" viewBox="0 0 40 40" fill="none"> -->
-        <span class="logo-circle">
-        <img src="/crestcell logo yellow.jpg.jpeg" alt="Crest Solar Cell">
-        </span>
-        <circle cx="20" cy="20" r="8" fill="#F2A93B"/>
-        <g stroke="#F2A93B" stroke-width="2.4" stroke-linecap="round">
-          <line x1="20" y1="2" x2="20" y2="8"/>
-          <line x1="20" y1="32" x2="20" y2="38"/>
-          <line x1="2" y1="20" x2="8" y2="20"/>
-          <line x1="32" y1="20" x2="38" y2="20"/>
-          <line x1="7.5" y1="7.5" x2="11.5" y2="11.5"/>
-          <line x1="28.5" y1="28.5" x2="32.5" y2="32.5"/>
-          <line x1="7.5" y1="32.5" x2="11.5" y2="28.5"/>
-          <line x1="28.5" y1="11.5" x2="32.5" y2="7.5"/>
-        </g>
-      </svg>
-      <span>Crest Solar Energies<small>Turning Sunlight Into Savings.</small></span>
-    </a>
+  <span class="logo-circle">
+    <img src="/crestcell logo yellow.jpg.jpeg" alt="Crest Solar Energies">
+  </span>
+  <span>Crest Solar Energies<small>Turning Sunlight Into Savings.</small></span>
+</a>
 
     <nav class="main-nav" id="mainNav">
       <a href="#about">Home</a>
@@ -900,19 +886,11 @@
   <div class="wrap footer-grid">
     <div class="footer-brand">
       <a href="#top" class="logo">
-       <span class="logo-circle">
-        <img src="/crestcell logo yellow.jpg.jpeg" alt="Crest Solar Energies">
-       </span>
-          <circle cx="20" cy="20" r="8" fill="#F2A93B"/>
-          <g stroke="#F2A93B" stroke-width="2.4" stroke-linecap="round">
-            <line x1="20" y1="2" x2="20" y2="8"/><line x1="20" y1="32" x2="20" y2="38"/>
-            <line x1="2" y1="20" x2="8" y2="20"/><line x1="32" y1="20" x2="38" y2="20"/>
-            <line x1="7.5" y1="7.5" x2="11.5" y2="11.5"/><line x1="28.5" y1="28.5" x2="32.5" y2="32.5"/>
-            <line x1="7.5" y1="32.5" x2="11.5" y2="28.5"/><line x1="28.5" y1="11.5" x2="32.5" y2="7.5"/>
-          </g>
-        </svg>
-        <span>Crest Solar Energies</span>
-      </a>
+ <span class="logo-circle">
+  <img src="/crestcell logo yellow.jpg.jpeg" alt="Crest Solar Energies">
+ </span>
+  <span>Crest Solar Energies</span>
+</a>
       <p>Rooftop solar design, supply, and installation services for homes, businesses, and industries across India.</p>
       <div class="social-row">
        
@@ -963,6 +941,7 @@
 </a>
 
 <a href="https://wa.me/918126442500?text=Hi%20Crest%20Solar%2C%20I%27d%20like%20a%20solar%20quote" class="wa-float" aria-label="Chat on WhatsApp">
+  <span class="float-tooltip">Chat on WhatsApp</span>
   <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 20l1-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
 </a>
 
