@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="shortcut icon" href="/Favicon.jpeg" type="image/png">
+<link rel="shortcut icon" href="/crestcell logo yellow.jpg.jpeg" type="image/png">
 <title>Crest Solar Energies| Rooftop Solar All Over India</title>
-<meta name="description" content="Crest Solar Cell designs and installs rooftop solar panels, inverters and battery storage for homes and industry in Muradnagar, Ghaziabad, Uttar Pradesh.">
+<meta name="description" content="Crest Solar Energies designs and installs rooftop solar panels, inverters and battery storage for homes and industry all over India.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -501,6 +501,42 @@
     .reveal{opacity:1;transform:none;transition:none;}
     .wa-float::before{animation:none;}
   }
+
+  /* ---------- Privacy Policy Modal ---------- */
+.modal-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(13,23,41,.72);
+  display:none;align-items:center;justify-content:center;
+  padding:24px;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--paper);
+  border-radius:var(--radius);
+  max-width:680px;width:100%;
+  max-height:82vh;
+  display:flex;flex-direction:column;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.5);
+}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 26px;border-bottom:1px solid var(--line);
+}
+.modal-head h3{margin:0;color:var(--navy);font-size:1.3rem;}
+.modal-close{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+  background:transparent;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex:none;
+}
+.modal-close svg{width:16px;height:16px;stroke:var(--navy);}
+.modal-close:hover{background:var(--cream);}
+.modal-body{
+  padding:22px 26px 28px;overflow-y:auto;color:var(--slate);font-size:.92rem;
+}
+.modal-body h4{color:var(--navy);font-family:var(--font-body);font-size:1rem;margin:1.2em 0 .4em;}
+.modal-body p{margin-bottom:.9em;}
+.modal-body ul{margin:0 0 .9em;padding-left:1.2em;}
+.modal-body li{margin-bottom:.4em;}
 </style>
 </head>
 <body>
@@ -961,7 +997,7 @@
   </div>
 
   <div class="bottom-bar">
-    <span>© 2026 Crest Solar Cell. All rights reserved. · <a href="#">Privacy Policy</a></span>
+    <span>© 2026 Crest Solar Energies. All rights reserved. · <a href="#" id="privacyLink">Privacy Policy</a></span>
   </div>
 </footer>
 
@@ -975,6 +1011,43 @@
   <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 20l1-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
 </a>
 
+<!-- ============ PRIVACY POLICY MODAL ============ -->
+<div class="modal-overlay" id="privacyModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>Privacy Policy</h3>
+      <button class="modal-close" id="privacyClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Crest Solar Energies ("we", "us", "our") respects your privacy. This policy explains what information we collect through this website and how we use it.</p>
+
+      <h4>Information we collect</h4>
+      <ul>
+        <li>Name, phone number, email address and site location when you fill out our quote request form.</li>
+        <li>Details you share about your electricity requirement or roof, if provided in the form.</li>
+        <li>Basic usage data (pages visited, browser type) collected automatically for site analytics.</li>
+      </ul>
+
+      <h4>How we use it</h4>
+      <ul>
+        <li>To respond to your quote request and schedule a free site survey.</li>
+        <li>To contact you via phone, WhatsApp or email about your enquiry.</li>
+        <li>To prepare net-metering and subsidy applications on your behalf, where requested.</li>
+      </ul>
+
+      <h4>Sharing</h4>
+      <p>We do not sell your personal information. We may share necessary details with PVVNL or relevant government portals solely to process net-metering and subsidy applications for your installation.</p>
+
+      <h4>Your choices</h4>
+      <p>You can request that we delete your contact details from our records at any time by writing to us at Crestcellenergy@gmail.com.</p>
+
+      <h4>Contact</h4>
+      <p>Questions about this policy can be sent to Crestcellenergy@gmail.com or +91 8126 442 500.</p>
+    </div>
+  </div>
+</div>
 <script>
   // mobile nav toggle
   const hamburger = document.getElementById('hamburgerBtn');
@@ -1047,6 +1120,33 @@ const WHATSAPP_NUMBER = '918126442500'; // TODO: replace with your real WhatsApp
     form.reset();
     setTimeout(() => msg.classList.remove('show'), 6000);
   });
+
+  // Privacy policy modal
+const privacyLink = document.getElementById('privacyLink');
+const privacyModal = document.getElementById('privacyModal');
+const privacyClose = document.getElementById('privacyClose');
+
+privacyLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  privacyModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+privacyClose.addEventListener('click', () => {
+  privacyModal.classList.remove('open');
+  document.body.style.overflow = '';
+});
+privacyModal.addEventListener('click', (e) => {
+  if (e.target === privacyModal){
+    privacyModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && privacyModal.classList.contains('open')){
+    privacyModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
 </script>
 
 </body>
