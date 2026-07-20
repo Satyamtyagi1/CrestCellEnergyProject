@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/crestcell logo yellow.jpg.jpeg" type="image/png">
+    <title>Calculator</title>
+    <style>
+         :root{
+    --navy:#12213A;
+    --navy-2:#1B2F52;
+    --gold:#F2A93B;
+    --gold-deep:#D98A1E;
+    --ember:#E4622F;
+    --cream:#FBF6EC;
+    --paper:#FFFFFF;
+    --ink:#1C2333;
+    --slate:#5B6478;
+    --leaf:#3F8F5F;
+    --line:#E4DCC9;
+    --line-dark:rgba(255,255,255,0.14);
+    --font-display:'Fraunces', serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+    --radius:14px;
+    --shadow: 0 20px 40px -24px rgba(18,33,58,0.35);
+  }
+   *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+  margin:0;
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--navy);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;}
+  h1,h2,h3,h4{
+    font-family:var(--font-display);
+    font-weight:700;
+    line-height:1.08;
+    margin:0 0 .5em;
+    letter-spacing:-0.01em;
+  }
+
+header{
+    position:sticky;top:0;z-index:60;
+    background:rgba(251,246,236,.97);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 28px;max-width:1180px;margin:0 auto;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--font-display);font-weight:700;font-size:1.28rem;
+    color:var(--navy);text-decoration:none;
+  }
+  .logo small{
+    display:block;font-family:var(--font-mono);font-weight:500;
+    font-size:.58rem;letter-spacing:.16em;color:var(--slate);text-transform:uppercase;
+  }
+  .logo-circle{
+    width:40px;height:40px;border-radius:50%;background:var(--navy);
+    display:flex;align-items:center;justify-content:center;flex:none;
+    border:2px solid var(--gold);overflow:hidden;
+  }
+  .logo-circle img{width:100%;height:100%;object-fit:cover;}
+  nav.main-nav{display:flex;align-items:center;gap:30px;}
+  nav.main-nav a{
+    font-size:.92rem;font-weight:500;text-decoration:none;color:var(--navy);
+    position:relative;padding:4px 0;
+  }
+  nav.main-nav a::after{
+    content:"";position:absolute;left:0;bottom:-2px;height:2px;width:0;
+    background:var(--ember);transition:width .2s ease;
+  }
+  nav.main-nav a:hover::after, nav.main-nav a.active::after{width:100%;}
+  nav.main-nav a.active{color:var(--ember);}
+  .nav-cta{display:flex;align-items:center;gap:14px;}
+  .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+  .hamburger span{width:24px;height:2px;background:var(--navy);display:block;}
+  .btn{
+    display:inline-flex;align-items:center;gap:.55em;font-weight:600;font-size:.95rem;
+    padding:11px 20px;border-radius:999px;border:1px solid var(--navy);
+    cursor:pointer;text-decoration:none;color:var(--navy);background:transparent;
+    transition:background .18s ease,color .18s ease;white-space:nowrap;
+  }
+  .btn:hover{background:var(--navy);color:#fff;}
+
+  @media(max-width:920px){
+    nav.main-nav{
+      position:fixed;top:65px;left:0;right:0;bottom:0;height:calc(100vh - 65px);
+      z-index:59;background:var(--cream);
+      flex-direction:column;align-items:flex-start;padding:28px;gap:22px;
+      transform:translateX(100%);transition:transform .3s ease;
+      border-top:1px solid var(--line);overflow-y:auto;
+      box-shadow:-8px 0 24px -12px rgba(18,33,58,.25);
+    }
+    nav.main-nav.open{transform:translateX(0);}
+    nav.main-nav a{font-size:1.1rem;width:100%;}
+    .hamburger{display:flex;}
+    .nav-cta .btn{display:none;}
+  }
+
+
+  .calc-section{
+    background:var(--cream);
+    padding:80px 0;
+  }
+  .calc-head{text-align:center;max-width:640px;margin:0 auto 44px;}
+  .calc-head h2{color:var(--navy);}
+  .calc-head p{color:var(--slate);}
+
+  .calc-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:34px;
+    max-width:720px;
+    margin:0 auto;
+    box-shadow:var(--shadow);
+  }
+  .calc-field{margin-bottom:20px;}
+  .calc-field label{
+    display:flex;align-items:center;gap:8px;
+    font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:8px;
+  }
+  .calc-field label svg{width:16px;height:16px;stroke:var(--ember);}
+  .calc-input-wrap{
+    display:flex;align-items:center;
+    border:1px solid var(--line);border-radius:10px;
+    background:var(--cream);overflow:hidden;
+  }
+  .calc-input-wrap span{
+    padding:0 14px;font-family:var(--font-mono);color:var(--slate);font-size:.95rem;
+  }
+  .calc-input-wrap input, .calc-input-wrap select{
+    flex:1;border:none;background:transparent;padding:14px 12px;
+    font-family:var(--font-body);font-size:1rem;color:var(--ink);outline:none;
+  }
+  .calc-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media(max-width:560px){.calc-row{grid-template-columns:1fr;}}
+
+  .calc-btn{
+    width:100%;margin-top:8px;
+    background:var(--gold);color:var(--navy);
+    border:none;border-radius:999px;
+    padding:16px;font-size:1rem;font-weight:700;
+    cursor:pointer;transition:background .18s ease;
+    font-family:var(--font-body);
+  }
+  .calc-btn:hover{background:var(--gold-deep);}
+
+  /* ---------- Report ---------- */
+  .calc-report{
+    max-width:900px;margin:50px auto 0;display:none;
+  }
+  .calc-report.show{display:block;}
+
+  .report-badge{
+    display:block;width:fit-content;margin:0 auto 18px;
+    background:var(--navy);color:var(--gold);
+    font-family:var(--font-mono);font-size:.75rem;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;
+    padding:8px 20px;border-radius:999px;
+  }
+  .report-title{text-align:center;color:var(--navy);margin-bottom:6px;}
+  .report-sub{text-align:center;color:var(--slate);font-size:.9rem;margin-bottom:34px;}
+
+  .hero-metric{
+    background:linear-gradient(120deg, var(--navy), var(--navy-2));
+    color:#fff;border-radius:var(--radius);
+    padding:32px 30px;display:flex;justify-content:space-between;
+    align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:24px;
+  }
+  .hero-metric .label{
+    font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;
+    text-transform:uppercase;color:#AEB9D1;margin-bottom:8px;
+  }
+  .hero-metric .value{
+    font-family:var(--font-mono);font-size:2.6rem;font-weight:600;color:var(--gold);
+    line-height:1;
+  }
+  .hero-metric .value small{font-size:1.1rem;color:#C9D2E4;}
+  .hero-metric .side-stats{display:flex;gap:14px;flex-wrap:wrap;}
+  .hero-metric .chip{
+    background:rgba(255,255,255,.08);border:1px solid var(--line-dark);
+    border-radius:10px;padding:12px 16px;text-align:center;min-width:120px;
+  }
+  .hero-metric .chip b{display:block;font-family:var(--font-mono);color:#fff;font-size:1.1rem;}
+  .hero-metric .chip span{font-size:.7rem;color:#9FADC7;text-transform:uppercase;letter-spacing:.05em;}
+.pdf-hide{display:none !important;}
+  .report-block{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 28px;margin-bottom:20px;
+  }
+  .report-block h4{
+    display:flex;align-items:center;gap:8px;
+    font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--ember);margin-bottom:18px;font-weight:600;
+  }
+  .report-block h4 svg{width:16px;height:16px;stroke:var(--ember);}
+
+  .metric-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media(max-width:640px){.metric-trio{grid-template-columns:1fr;}}
+  .metric-trio div{text-align:center;padding:16px 8px;background:var(--cream);border-radius:10px;}
+  .metric-trio .m-tag{
+    font-family:var(--font-mono);font-size:.68rem;color:var(--slate);
+    text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;display:block;
+  }
+  .metric-trio b{display:block;font-size:1.35rem;color:var(--navy);font-family:var(--font-mono);}
+  .metric-trio small{color:var(--slate);font-size:.75rem;}
+
+  .cost-line{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:12px 0;border-bottom:1px solid var(--line);font-size:.95rem;
+  }
+  .cost-line:last-child{border-bottom:none;}
+  .cost-line .tag-pill{
+    background:var(--cream);color:var(--leaf);font-size:.72rem;font-weight:600;
+    padding:3px 10px;border-radius:999px;margin-left:8px;
+  }
+  .cost-line.total{
+    background:var(--cream);border-radius:10px;padding:14px 16px;
+    font-weight:700;color:var(--navy);border-bottom:none;margin-top:6px;
+  }
+  .cost-line .neg{color:var(--leaf);font-weight:600;}
+  .cost-line .amt{font-family:var(--font-mono);font-weight:600;}
+
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:560px){.duo-grid{grid-template-columns:1fr;}}
+  .duo-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px;text-align:center;
+  }
+  .duo-card .big{font-family:var(--font-mono);font-size:2rem;color:var(--leaf);font-weight:700;}
+  .duo-card span{font-size:.85rem;color:var(--slate);}
+
+  .env-block{
+    background:linear-gradient(120deg, var(--leaf), #2f6e46);
+    color:#fff;border-radius:var(--radius);padding:28px;
+    display:flex;gap:30px;flex-wrap:wrap;justify-content:center;
+  }
+  .env-block div{text-align:center;}
+  .env-block b{display:block;font-family:var(--font-mono);font-size:1.8rem;}
+  .env-block span{font-size:.8rem;color:#DDEFE2;}
+
+  .calc-note{
+    text-align:center;font-size:.78rem;color:var(--slate);margin-top:24px;
+  }
+  .calc-cta{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:30px;
+}
+.calc-cta .btn svg{
+  width:18px;height:18px;stroke:currentColor;flex:none;
+}
+
+.btn-pdf{
+  display:inline-flex;
+  align-items:center;
+  gap:.6em;
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:.95rem;
+  padding:14px 28px;
+  border-radius:999px;
+  border:1.5px solid var(--navy);
+  background:var(--paper);
+  color:var(--navy);
+  cursor:pointer;
+  transition:background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
+  white-space:nowrap;
+}
+.btn-pdf svg{
+  width:18px;height:18px;stroke:var(--navy);
+  transition:stroke .18s ease, transform .18s ease;
+}
+.btn-pdf:hover{
+  background:var(--navy);
+  color:#fff;
+  box-shadow:0 12px 24px -12px rgba(18,33,58,.45);
+}
+.btn-pdf:hover svg{
+  stroke:#fff;
+  transform:translateY(2px);
+}
+.btn-pdf:active{
+  transform:translateY(1px);
+}
+.btn-pdf:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
+}
+.btn-pdf:disabled:hover{
+  background:var(--paper);
+  color:var(--navy);
+}
+.btn-pdf:disabled:hover svg{
+  stroke:var(--navy);
+}
+ footer{background:#0D1729;color:#AEB9D1;padding:50px 0;text-align:center;}
+  footer p{margin:0;font-size:.85rem;}
+  footer a{color:var(--gold);text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+
+  /* ---------- Floating buttons ---------- */
+  .wa-float{
+    position:fixed;right:22px;bottom:22px;z-index:70;
+    width:56px;height:56px;border-radius:50%;background:var(--leaf);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 12px 26px -8px rgba(63,143,95,.7);text-decoration:none;
+  }
+  .wa-float svg{width:26px;height:26px;stroke:#fff;fill:none;}
+  .directions-float{
+    position:fixed;right:22px;bottom:90px;z-index:70;
+    width:56px;height:56px;border-radius:50%;background:var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 12px 26px -8px rgba(242,169,59,.7);text-decoration:none;
+  }
+  .directions-float svg{width:26px;height:26px;stroke:var(--navy);fill:none;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ============ SOLAR SAVINGS CALCULATOR ============ -->
+ <header>
+  <div class="nav-row">
+    <a href="index.html" class="logo">
+      <span class="logo-circle">
+        <img src="/crestcell logo yellow.jpg.jpeg" alt="Crest Solar Energies">
+      </span>
+      <span>Crest Solar Energies<small>Turning Sunlight Into Savings.</small></span>
+    </a>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="index.html#products">Products</a>
+      <a href="https://pmsuryaghar.gov.in/#/">PM Surya Ghar Yojana</a>
+      <a href="index.html#projects">References</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="/manufacturers.html">Partners</a>
+      <a href="index.html#faq">FAQs</a>
+      <a href="index.html#contact">Contact</a>
+       
+    </nav>
+    <!-- </div> -->
+
+    <div class="nav-cta">
+      <!-- <a href="/gallery.html" class="btn">Gallery</a> -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="calc-section" id="calculator">
+  <div class="wrap">
+    <div class="calc-head">
+      <span class="eyebrow" style="display:flex;justify-content:center;"></span>
+      <h2>Solar Savings Calculator</h2>
+      <p>Enter your monthly electricity bill to get an instant estimate of your ideal system size, savings and payback period.</p>
+    </div>
+
+    <div class="calc-card">
+      <div class="calc-field">
+        <label>₹ Monthly Electricity Bill</label>
+        <div class="calc-input-wrap">
+          <span>₹</span>
+          <input type="number" id="calcBill" placeholder="e.g. 5000" min="100" value="5000">
+          <span>/ month</span>
+        </div>
+      </div>
+
+      <div class="calc-row">
+        <div class="calc-field">
+          <label>📍 State / Union Territory</label>
+          <div class="calc-input-wrap">
+            <select id="calcState"></select>
+          </div>
+        </div>
+        <div class="calc-field">
+          <label>🏠 Customer Category</label>
+          <div class="calc-input-wrap">
+            <select id="calcCategory">
+              <option value="Residential">Residential</option>
+              <option value="Commercial">Commercial</option>
+              <option value="Industrial">Industrial</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="calc-btn" id="calcBtn">Calculate My Savings</button>
+    </div>
+
+    <!-- ============ REPORT ============ -->
+    <div class="calc-report" id="calcReport">
+      <span class="report-badge" id="repState">UTTAR PRADESH</span>
+      <h2 class="report-title">Your Solar Savings Report</h2>
+      <p class="report-sub">Based on your inputs — results are indicative</p>
+
+      <div class="hero-metric">
+        <div>
+          <div class="label">Recommended Plant Size</div>
+          <div class="value" id="repPlantSize">0<small> kWp</small></div>
+          <div class="label" style="margin-top:8px;">Based on your monthly bill</div>
+        </div>
+        <div class="side-stats">
+          <div class="chip"><b id="repDailyGen">0 kWh</b><span>Daily Generation</span></div>
+          <div class="chip"><b id="repSunHours">0 hrs/day</b><span>Peak Sun Hours</span></div>
+        </div>
+      </div>
+
+      <div class="report-block">
+        <h4>⚡ Electricity Generation</h4>
+        <div class="metric-trio">
+          <div><span class="m-tag">Monthly</span><b id="genMonthly">0</b><small>kWh per month</small></div>
+          <div><span class="m-tag">Annual</span><b id="genAnnual">0</b><small>kWh per year</small></div>
+          <div><span class="m-tag">30-Year</span><b id="genLifetime">0</b><small>lifetime total</small></div>
+        </div>
+      </div>
+
+      <div class="report-block">
+        <h4>₹ Financial Savings</h4>
+        <div class="metric-trio">
+          <div><span class="m-tag">Monthly</span><b id="saveMonthly">₹0</b><small>per month</small></div>
+          <div><span class="m-tag">Annual</span><b id="saveAnnual">₹0</b><small>per year</small></div>
+          <div><span class="m-tag">30-Year</span><b id="saveLifetime">₹0</b><small>lifetime savings</small></div>
+        </div>
+      </div>
+
+      <div class="report-block">
+        <h4>🏷 System Cost &amp; Subsidy</h4>
+        <div class="cost-line">
+          <span>System Cost (DCR Panels)</span>
+          <span class="amt" id="costSystem">₹0</span>
+        </div>
+        <div class="cost-line">
+          <span>PM Surya Ghar Govt. Subsidy <span class="tag-pill" id="subsidyTag">—</span></span>
+          <span class="amt neg" id="costSubsidy">– ₹0</span>
+        </div>
+        <div class="cost-line total">
+          <span>Your Net Investment</span>
+          <span class="amt" id="costNet">₹0</span>
+        </div>
+      </div>
+
+      <div class="duo-grid" style="margin-bottom:20px;">
+        <div class="duo-card">
+          <div class="big" id="repPayback">0 Yrs</div>
+          <span>Simple Payback Period</span>
+        </div>
+        <div class="duo-card">
+          <div class="big" id="repROI">0%</div>
+          <span>Annual Return on Investment</span>
+        </div>
+      </div>
+
+      <div class="report-block" style="background:transparent;border:none;padding:0;">
+        <h4>🌱 Environmental Impact</h4>
+        <div class="env-block">
+          <div><b id="envCO2">0 T</b><span>CO₂ Emissions Mitigated (30 yrs)</span></div>
+          <div><b id="envTrees">0</b><span>Trees Planted Equivalent</span></div>
+        </div>
+      </div>
+
+      <p class="calc-note">*Figures are indicative, based on standard assumptions for tariff, sunlight hours and system cost. Actual numbers are confirmed after a free site survey.</p>
+
+     <!-- <div class="calc-cta">
+  <a href="#" id="calcWaShare" class="btn btn-leaf">
+     <button id="calcPdfBtn" class="btn-pdf" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v12"/>
+      <path d="M7 11l5 5 5-5"/>
+      <path d="M4 19h16"/>
+    </svg>
+    <span>Share This Report on WhatsApp</span>
+  </button>
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 20l1-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
+    
+  <! </a>
+  <button id="calcPdfBtn" class="btn-pdf" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v12"/>
+      <path d="M7 11l5 5 5-5"/>
+      <path d="M4 19h16"/>
+    </svg>
+    <span>Download PDF</span>
+  </button>
+</div>
+    </div>
+  </div> --> 
+  <div class="calc-cta">
+
+  <!-- WhatsApp Share -->
+  <a href="#" id="calcWaShare" class="btn btn-leaf">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 20l1-5.3A8.5 8.5 0 1 1 21 11.5z"/>
+    </svg>
+    <span>Share This Report on WhatsApp</span>
+  </a>
+
+  <!-- Download PDF -->
+  <button id="calcPdfBtn" class="btn-pdf" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v12"/>
+      <path d="M7 11l5 5 5-5"/>
+      <path d="M4 19h16"/>
+    </svg>
+    <span>Download PDF</span>
+  </button>
+
+</div>
+</section>
+<footer>
+  <div class="wrap">
+    <p>© 2026 Crest Solar Energies. All rights reserved. · <a href="index.html">Back to Home</a></p>
+  </div>
+</footer>
+
+<a href="https://maps.app.goo.gl/aspMGZjMhWan3Z838?g_st=aw" target="_blank" rel="noopener" class="directions-float" aria-label="Get Directions">
+  <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+</a>
+<a href="https://wa.me/918126442500?text=Hi%20Crest%20Solar%2C%20I%27d%20like%20a%20solar%20quote" class="wa-float" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 20l1-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
+</a>
+
+
+<script>
+     const hamburger = document.getElementById('hamburgerBtn');
+  const mainNav = document.getElementById('mainNav');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mainNav.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+  mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mainNav.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', false);
+  }));
+(function(){
+  // Peak sun hours (kWh/m²/day) and tariffs (₹/kWh) — [Residential, Commercial, Industrial]
+  const STATE_DATA = {
+    "Uttar Pradesh":      { psh:5.3, tariff:[4.25,7.50,6.50] },
+    "Delhi":              { psh:5.3, tariff:[4.50,7.75,6.75] },
+    "Maharashtra":        { psh:5.6, tariff:[5.50,9.50,8.00] },
+    "Gujarat":            { psh:5.8, tariff:[4.75,7.25,6.25] },
+    "Rajasthan":          { psh:6.0, tariff:[5.25,8.25,7.25] },
+    "Punjab":             { psh:5.2, tariff:[4.00,7.00,6.00] },
+    "Haryana":            { psh:5.3, tariff:[4.50,7.50,6.50] },
+    "Madhya Pradesh":     { psh:5.5, tariff:[4.75,7.75,6.75] },
+    "Karnataka":          { psh:5.6, tariff:[5.00,8.50,7.50] },
+    "Tamil Nadu":         { psh:5.5, tariff:[4.50,8.00,7.00] },
+    "Telangana":          { psh:5.6, tariff:[4.75,8.25,7.25] },
+    "Andhra Pradesh":     { psh:5.6, tariff:[4.75,8.00,7.00] },
+    "West Bengal":        { psh:4.9, tariff:[5.75,9.00,8.00] },
+    "Bihar":              { psh:5.0, tariff:[5.50,8.00,7.00] },
+    "Odisha":             { psh:5.1, tariff:[4.75,7.50,6.50] },
+    "Kerala":             { psh:5.0, tariff:[5.25,8.50,7.50] },
+    "Himachal Pradesh":   { psh:5.2, tariff:[3.75,6.75,5.75] },
+    "Uttarakhand":        { psh:5.1, tariff:[4.25,7.25,6.25] },
+    "Jharkhand":          { psh:5.0, tariff:[5.00,7.75,6.75] },
+    "Chhattisgarh":       { psh:5.3, tariff:[4.25,7.25,6.25] },
+    "Assam":              { psh:4.5, tariff:[5.75,8.75,7.75] }
+  };
+  const DEFAULT_DATA = { psh:5.3, tariff:[5.00,8.00,7.00] };
+
+  const CATEGORIES = ["Residential","Commercial","Industrial"];
+  const COST_PER_KW = 55000;      // ₹ per kWp (DCR panels, all-inclusive)
+  const CO2_PER_KWH = 0.82;       // kg CO2 avoided per kWh (India grid average)
+  const KG_PER_TREE_LIFETIME = 625; // kg CO2 absorbed per tree over 30 yrs (approx)
+  const DEGRADATION_FACTOR = 0.93;  // avg output factor over 30-yr panel life
+
+  const stateSelect = document.getElementById('calcState');
+  Object.keys(STATE_DATA).sort().forEach(s=>{
+    const opt = document.createElement('option');
+    opt.value = s; opt.textContent = s;
+    stateSelect.appendChild(opt);
+  });
+  stateSelect.value = "Uttar Pradesh";
+
+  function inr(n){
+    return '₹' + Math.round(n).toLocaleString('en-IN');
+  }
+  function inrLakh(n){
+    if (n >= 100000) return '₹' + (n/100000).toFixed(2) + ' L';
+    return inr(n);
+  }
+
+  function calcSubsidy(sizeKw, category){
+    if (category !== "Residential") return 0;
+    if (sizeKw <= 2) return sizeKw * 30000;
+    if (sizeKw < 3) return 60000 + (sizeKw - 2) * 18000;
+    return 78000; // capped for 3kW and above
+  }
+  document.getElementById('calcPdfBtn').addEventListener('click', function(){
+  const btn = this;
+  const report = document.getElementById('calcReport');
+  const ctaRow = report.querySelector('.calc-cta');
+
+  btn.textContent = 'Preparing PDF…';
+  btn.disabled = true;
+
+  ctaRow.classList.add('pdf-hide');
+
+  html2canvas(report, {
+    scale: 2,
+    backgroundColor: '#FBF6EC',
+    useCORS: true
+  }).then(function(canvas){
+    ctaRow.classList.remove('pdf-hide');
+    btn.textContent = '⬇ Download PDF';
+    btn.disabled = false;
+
+    const { jsPDF } = window.jspdf;
+
+    // Page geometry with margins
+    const pageWidth = 210; // mm, A4 width
+    const margin = 12;     // mm on every side
+    const contentWidth = pageWidth - margin * 2;
+
+    // Scale the whole canvas to fit contentWidth, keep aspect ratio
+    const pxToMm = contentWidth / canvas.width;
+    const contentHeight = canvas.height * pxToMm;
+    const pageHeight = contentHeight + margin * 2;
+
+    // Custom page size = exactly as tall as the content needs — no cuts, no blank pages
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: [pageWidth, pageHeight]
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    pdf.addImage(imgData, 'PNG', margin, margin, contentWidth, contentHeight);
+
+    pdf.save('Crest-Solar-Savings-Report.pdf');
+  }).catch(function(err){
+    ctaRow.classList.remove('pdf-hide');
+    btn.textContent = '⬇ Download PDF';
+    btn.disabled = false;
+    alert('Something went wrong generating the PDF. Please try again.');
+    console.error(err);
+  });
+});
+//   document.getElementById('calcPdfBtn').addEventListener('click', function(){
+//   const btn = this;
+//   const report = document.getElementById('calcReport');
+//   const ctaRow = report.querySelector('.calc-cta');
+
+//   btn.textContent = 'Preparing PDF…';
+//   btn.disabled = true;
+
+//   ctaRow.classList.add('pdf-hide');
+
+//   html2canvas(report, {
+//     scale: 2,
+//     backgroundColor: '#FBF6EC',
+//     useCORS: true
+//   }).then(function(canvas){
+//     ctaRow.classList.remove('pdf-hide');
+//     btn.textContent = '⬇ Download PDF';
+//     btn.disabled = false;
+
+//     const { jsPDF } = window.jspdf;
+//     const pdf = new jsPDF('p', 'mm', 'a4');
+
+//     // Page geometry with margins
+//     const pageWidth = 210;
+//     const pageHeight = 310;
+//     const margin = 12; // mm on every side
+//     const contentWidth = pageWidth - margin * 2;
+//     const contentHeight = pageHeight - margin * 2;
+
+//     // Scale factor: mm per canvas-pixel, based on width
+//     const pxToMm = contentWidth / canvas.width;
+//     const pageHeightInCanvasPx = contentHeight / pxToMm;
+
+//     let renderedPx = 0;
+//     let pageNum = 0;
+
+//     while (renderedPx < canvas.height){
+//       const sliceHeightPx = Math.min(pageHeightInCanvasPx, canvas.height - renderedPx);
+
+//       // Slice this page's chunk out of the full canvas
+//       const pageCanvas = document.createElement('canvas');
+//       pageCanvas.width = canvas.width;
+//       pageCanvas.height = sliceHeightPx;
+//       const ctx = pageCanvas.getContext('2d');
+//       ctx.fillStyle = '#FBF6EC';
+//       ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+//       ctx.drawImage(
+//         canvas,
+//         0, renderedPx, canvas.width, sliceHeightPx,
+//         0, 0, canvas.width, sliceHeightPx
+//       );
+
+//       const imgData = pageCanvas.toDataURL('image/png');
+//       const sliceHeightMm = sliceHeightPx * pxToMm;
+
+//       if (pageNum > 0) pdf.addPage();
+//       pdf.addImage(imgData, 'PNG', margin, margin, contentWidth, sliceHeightMm);
+
+//       renderedPx += sliceHeightPx;
+//       pageNum++;
+//     }
+
+//     pdf.save('Crest-Solar-Savings-Report.pdf');
+//   }).catch(function(err){
+//     ctaRow.classList.remove('pdf-hide');
+//     btn.textContent = '⬇ Download PDF';
+//     btn.disabled = false;
+//     alert('Something went wrong generating the PDF. Please try again.');
+//     console.error(err);
+//   });
+// });
+
+  document.getElementById('calcBtn').addEventListener('click', function(){
+    const bill = parseFloat(document.getElementById('calcBill').value) || 0;
+    const state = stateSelect.value;
+    const category = document.getElementById('calcCategory').value;
+
+    if (bill <= 0){
+      alert('Please enter your monthly electricity bill.');
+      return;
+    }
+
+    const data = STATE_DATA[state] || DEFAULT_DATA;
+    const catIndex = CATEGORIES.indexOf(category);
+    const tariff = data.tariff[catIndex];
+    const psh = data.psh;
+
+    const monthlyUnits = bill / tariff;
+    const dailyUnits = monthlyUnits / 30;
+    const plantSize = dailyUnits / (psh * 0.8); // kWp, 80% performance ratio
+
+    const genMonthly = monthlyUnits;
+    const genAnnual = genMonthly * 12;
+    const genLifetime = genAnnual * 30 * DEGRADATION_FACTOR;
+
+    const saveMonthly = bill;
+    const saveAnnual = saveMonthly * 12;
+    const saveLifetime = saveAnnual * 30;
+
+    const systemCost = plantSize * COST_PER_KW;
+    const subsidy = calcSubsidy(plantSize, category);
+    const netInvestment = systemCost - subsidy;
+
+    const payback = netInvestment / saveAnnual;
+    const roi = (saveAnnual / netInvestment) * 100;
+
+    const co2Tons = (genLifetime * CO2_PER_KWH) / 1000;
+    const trees = Math.round((co2Tons * 1000) / KG_PER_TREE_LIFETIME);
+
+    // ---- Populate report ----
+    document.getElementById('repState').textContent = state.toUpperCase();
+    document.getElementById('repPlantSize').innerHTML = plantSize.toFixed(2) + '<small> kWp</small>';
+    document.getElementById('repDailyGen').textContent = dailyUnits.toFixed(1) + ' kWh';
+    document.getElementById('repSunHours').textContent = psh.toFixed(1) + ' hrs/day';
+
+    document.getElementById('genMonthly').textContent = Math.round(genMonthly).toLocaleString('en-IN');
+    document.getElementById('genAnnual').textContent = Math.round(genAnnual).toLocaleString('en-IN');
+    document.getElementById('genLifetime').textContent = Math.round(genLifetime).toLocaleString('en-IN');
+
+    document.getElementById('saveMonthly').textContent = inr(saveMonthly);
+    document.getElementById('saveAnnual').textContent = inr(saveAnnual);
+    document.getElementById('saveLifetime').textContent = inrLakh(saveLifetime);
+
+    document.getElementById('costSystem').textContent = inrLakh(systemCost);
+    document.getElementById('subsidyTag').textContent = category === "Residential"
+      ? 'PM Surya Ghar (max 3 kW)' : 'Non-residential — N/A';
+    document.getElementById('costSubsidy').textContent = '– ' + inr(subsidy);
+    document.getElementById('costNet').textContent = inrLakh(netInvestment);
+
+    document.getElementById('repPayback').textContent = payback.toFixed(1) + ' Yrs';
+    document.getElementById('repROI').textContent = roi.toFixed(1) + '%';
+
+    document.getElementById('envCO2').textContent = Math.round(co2Tons) + ' T';
+    document.getElementById('envTrees').textContent = trees.toLocaleString('en-IN');
+
+    const waText = encodeURIComponent(
+      `My Solar Savings Report (${state}, ${category}):\n` +
+      `Recommended Plant Size: ${plantSize.toFixed(2)} kWp\n` +
+      `Monthly Savings: ${inr(saveMonthly)}\n` +
+      `Net Investment: ${inrLakh(netInvestment)}\n` +
+      `Payback Period: ${payback.toFixed(1)} years\n` +
+      `I'd like to book a free site survey with Crest Solar Energies.`
+    );
+    document.getElementById('calcWaShare').href =
+      `https://wa.me/918126442500?text=${waText}`;
+
+    const report = document.getElementById('calcReport');
+    report.classList.add('show');
+    report.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+})();
+</script>
+</body>
+</html>
